@@ -8,7 +8,6 @@
 ### Initiate the Library
 ```java
 final class Plugin {
-
   void onLoad() {
     // Paper
     final var paperEventManager = new PaperEventManager();
