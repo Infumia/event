@@ -11,6 +11,12 @@
   <!-- Do NOT forget to relocate -->
   <dependency>
     <groupId>tr.com.infumia</groupId>
+    <artifactId>terminable</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
+  <dependency>
+    <groupId>tr.com.infumia</groupId>
     <artifactId>EventPaper</artifactId>
     <version>VERSION</version>
     <scope>provided</scope>
@@ -31,6 +37,7 @@ plugins {
 
 dependencies {
   // Do NOT forget to relocate.
+  implementation "tr.com.infumia:terminable:VERSION"
   implementation "tr.com.infumia:EventPaper:VERSION"
   implementation "tr.com.infumia:EventVelocity:VERSION"
 }
