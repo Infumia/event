@@ -1,5 +1,5 @@
 dependencies {
   implementation(project(":common"))
 
-  compileOnly(rootProject.libs.velocity)
+  compileOnly(libs.velocity)
 }
