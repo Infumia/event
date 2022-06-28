@@ -1,9 +1,13 @@
 [versions]
 lombok = "1.18.24"
 annotations = "23.0.0"
-terminable = "0.1.0"
+terminable = "0.1.1"
+paper = "1.18.2-R0.1-SNAPSHOT"
+velocity = "3.1.1"
 
 [libraries]
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 terminable = { module = "tr.com.infumia:terminable", version.ref = "terminable" }
+paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
