@@ -71,7 +71,6 @@ subprojects {
     }
 
     build {
-      dependsOn(spotlessApply)
       dependsOn(jar)
       dependsOn(sourcesJar)
       dependsOn(javadocJar)
