@@ -14,6 +14,13 @@ val signRequired = !rootProject.property("dev").toString().toBoolean()
 
 allprojects {
   group = "tr.com.infumia"
+
+  extra["qualifiedProjectName"] = if (parent == null) {
+    "Event"
+  } else {
+    val parentName = parent!!.extra["qualifiedProjectName"].toString()
+    parentName + name[0].toUpperCase() + name.substring(1)
+  }
 }
 
 subprojects {
@@ -22,6 +29,8 @@ subprojects {
   apply<MavenPublishPlugin>()
   apply<SigningPlugin>()
   apply<SpotlessPlugin>()
+
+  val qualifiedProjectName = project.extra["qualifiedProjectName"].toString()
 
   java {
     toolchain {
@@ -34,6 +43,12 @@ subprojects {
       options.encoding = Charsets.UTF_8.name()
     }
 
+    jar {
+      archiveClassifier.set(null as String?)
+      archiveBaseName.set(qualifiedProjectName)
+      archiveVersion.set(project.version.toString())
+    }
+
     javadoc {
       options.encoding = Charsets.UTF_8.name()
       (options as StandardJavadocDocletOptions).tags("todo")
@@ -42,12 +57,16 @@ subprojects {
     val javadocJar by creating(Jar::class) {
       dependsOn("javadoc")
       archiveClassifier.set("javadoc")
+      archiveBaseName.set(qualifiedProjectName)
+      archiveVersion.set(project.version.toString())
       from(javadoc)
     }
 
     val sourcesJar by creating(Jar::class) {
       dependsOn("classes")
       archiveClassifier.set("sources")
+      archiveBaseName.set(qualifiedProjectName)
+      archiveVersion.set(project.version.toString())
       from(sourceSets["main"].allSource)
     }
 
@@ -104,7 +123,7 @@ subprojects {
     publications {
       val publication = create<MavenPublication>("mavenJava") {
         groupId = project.group.toString()
-        artifactId = "event"
+        artifactId = qualifiedProjectName
         version = project.version.toString()
 
         from(components["java"])
