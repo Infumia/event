@@ -15,6 +15,14 @@ final class Plugin {
     // Velocity
     final var velocityEventManager = new VelocityEventManager(this.proxyServer);
     Plugins.init(this, velocityEventManager);
+    // Protocol
+    // No need to initiate anything.
+    Protocol.subscribe(ListenerPriority.NORMAL, PacketType.Play.Server.EXPLOSION)
+      .filter(event -> true)
+      .handler(event -> {
+
+      })
+      .bindWith(consumer);
   }
 }
 ```
@@ -36,6 +44,12 @@ final class Plugin {
   </dependency>
   <dependency>
     <groupId>tr.com.infumia</groupId>
+    <artifactId>EventProtocol</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
+  <dependency>
+    <groupId>tr.com.infumia</groupId>
     <artifactId>EventVelocity</artifactId>
     <version>VERSION</version>
     <scope>provided</scope>
@@ -52,6 +66,7 @@ dependencies {
   // Do NOT forget to relocate.
   implementation "tr.com.infumia:terminable:VERSION"
   implementation "tr.com.infumia:EventPaper:VERSION"
+  implementation "tr.com.infumia:EventProtocol:VERSION"
   implementation "tr.com.infumia:EventVelocity:VERSION"
 }
 ```

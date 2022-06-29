@@ -71,6 +71,7 @@ subprojects {
     }
 
     build {
+      dependsOn(spotlessApply)
       dependsOn(jar)
       dependsOn(sourcesJar)
       dependsOn(javadocJar)
@@ -80,6 +81,7 @@ subprojects {
   repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://repo.dmulloy2.net/repository/public/")
   }
 
   dependencies {
