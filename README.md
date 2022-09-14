@@ -16,7 +16,8 @@ final class Plugin {
     final var velocityEventManager = new VelocityEventManager(this.proxyServer);
     Plugins.init(this, velocityEventManager);
     // Protocol
-    // No need to initiate anything.
+    final var paperEventManager = new PaperEventManager();
+    Plugins.init(this, paperEventManager);
     Protocol.subscribe(ListenerPriority.NORMAL, PacketType.Play.Server.EXPLOSION)
       .filter(event -> true)
       .handler(event -> {
