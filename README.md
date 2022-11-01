@@ -78,5 +78,6 @@ dependencies {
   implementation "tr.com.infumia:EventPaper:VERSION"
   implementation "tr.com.infumia:EventProtocol:VERSION"
   implementation "tr.com.infumia:EventVelocity:VERSION"
+  implementation "tr.com.infumia:EventShiruka:VERSION"
 }
 ```
