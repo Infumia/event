@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * an interface to determine subscription builders.
@@ -42,7 +43,7 @@ public interface SubscriptionBuilder<
    */
   @NotNull
   default Sb biHandler(
-    @NotNull final Plugin plugin,
+    @Nullable final Plugin plugin,
     @NotNull final BiConsumer<Sb, Event> handler
   ) {
     return this.handlers().biConsumer(handler).register(plugin);
@@ -162,7 +163,7 @@ public interface SubscriptionBuilder<
    */
   @NotNull
   default Sb handler(
-    @NotNull final Plugin plugin,
+    @Nullable final Plugin plugin,
     @NotNull final Consumer<Event> handler
   ) {
     return this.biHandler(plugin, (__, e) -> handler.accept(e));

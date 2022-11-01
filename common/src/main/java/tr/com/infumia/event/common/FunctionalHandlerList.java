@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * an interface to determine functional handler lists.
@@ -53,7 +54,7 @@ public interface FunctionalHandlerList<
    * @return registered subscription.
    */
   @NotNull
-  Sb register(@NotNull Plugin plugin);
+  Sb register(@Nullable Plugin plugin);
 
   /**
    * an abstract implementation of {@link FunctionalHandlerList}.

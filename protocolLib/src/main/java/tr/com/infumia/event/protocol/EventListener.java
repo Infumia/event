@@ -92,7 +92,6 @@ final class EventListener extends PacketAdapter implements Subscription {
     @NotNull final List<BiConsumer<Subscription, PacketEvent>> handlers
   ) {
     super(plugin, getter.priority(), getter.types());
-    this.plugin = plugin;
     this.types = getter.types();
     this.exceptionConsumer = getter.exceptionConsumer();
     this.filters = getter.filters().toArray(Predicate[]::new);
