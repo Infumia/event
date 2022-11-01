@@ -1,6 +1,7 @@
 package tr.com.infumia.event.common;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * an interface to determine event managers.
@@ -23,7 +24,7 @@ public interface EventManager<Plugin, Event, Priority> {
    */
   @NotNull
   <Registered extends Event> EventExecutor<Registered> register(
-    @NotNull Plugin plugin,
+    @Nullable Plugin plugin,
     @NotNull Class<Registered> eventClass,
     @NotNull Priority priority,
     @NotNull EventExecutor<Registered> executor
@@ -37,7 +38,7 @@ public interface EventManager<Plugin, Event, Priority> {
    * @param <Registered> type of the registered event.
    */
   <Registered extends Event> void unregister(
-    @NotNull Plugin plugin,
+    @Nullable Plugin plugin,
     @NotNull EventExecutor<Registered> executor
   );
 }

@@ -15,6 +15,9 @@ final class Plugin {
     // Velocity
     final var velocityEventManager = new VelocityEventManager(this.proxyServer);
     Plugins.init(this, velocityEventManager);
+    // Shiru ka
+    final var shirukaEventManager = new ShirukaEventManager();
+    Plugins.init(shirukaEventManager);
     // Protocol
     final var paperEventManager = new PaperEventManager();
     Plugins.init(this, paperEventManager);
@@ -45,7 +48,7 @@ final class Plugin {
   </dependency>
   <dependency>
     <groupId>tr.com.infumia</groupId>
-    <artifactId>EventProtocol</artifactId>
+    <artifactId>EventProtocolLib</artifactId>
     <version>VERSION</version>
     <scope>provided</scope>
   </dependency>

@@ -1,8 +1,8 @@
-package tr.com.infumia.event.paper;
+package tr.com.infumia.event.shiruka;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.EventPriority;
-import org.bukkit.plugin.Plugin;
+import io.github.shiruka.api.event.Event;
+import io.github.shiruka.api.plugin.Plugin;
+import net.kyori.event.PostOrders;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.merged.MergedSubscriptionBuilder;
 import tr.com.infumia.event.common.single.SingleSubscriptionBuilder;
@@ -22,7 +22,7 @@ public interface Events {
   @NotNull
   static <
     Handled
-  > MergedSubscriptionBuilder<Plugin, Event, EventPriority, Handled> merge(
+  > MergedSubscriptionBuilder<Plugin, Event, Integer, Handled> merge(
     @NotNull final Class<Handled> handledClass
   ) {
     return MergedSubscriptionBuilder.newBuilder(handledClass);
@@ -42,9 +42,9 @@ public interface Events {
   @SafeVarargs
   static <
     Handled extends Event
-  > MergedSubscriptionBuilder<Plugin, Event, EventPriority, Handled> merge(
+  > MergedSubscriptionBuilder<Plugin, Event, Integer, Handled> merge(
     @NotNull final Class<Handled> cls,
-    @NotNull final EventPriority priority,
+    @NotNull final Integer priority,
     @NotNull final Class<? extends Handled>... classes
   ) {
     return MergedSubscriptionBuilder.newBuilder(cls, priority, classes);
@@ -63,11 +63,11 @@ public interface Events {
   @SafeVarargs
   static <
     Handled extends Event
-  > MergedSubscriptionBuilder<Plugin, Event, EventPriority, Handled> merge(
+  > MergedSubscriptionBuilder<Plugin, Event, Integer, Handled> merge(
     @NotNull final Class<Handled> cls,
     @NotNull final Class<? extends Handled>... classes
   ) {
-    return Events.merge(cls, EventPriority.NORMAL, classes);
+    return Events.merge(cls, PostOrders.NORMAL, classes);
   }
 
   /**
@@ -84,7 +84,7 @@ public interface Events {
     Handled extends Event
   > SingleSubscriptionBuilder<Plugin, Handled> subscribe(
     @NotNull final Class<Handled> cls,
-    @NotNull final EventPriority priority
+    @NotNull final Integer priority
   ) {
     return SingleSubscriptionBuilder.newBuilder(cls, priority);
   }
@@ -103,6 +103,6 @@ public interface Events {
   > SingleSubscriptionBuilder<Plugin, Handled> subscribe(
     @NotNull final Class<Handled> cls
   ) {
-    return Events.subscribe(cls, EventPriority.NORMAL);
+    return Events.subscribe(cls, PostOrders.NORMAL);
   }
 }

@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tr.com.infumia.event.common.EventExecutor;
 import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.event.common.Subscription;
@@ -82,7 +83,7 @@ final class EventListener<Plugin, Event, Priority>
   /**
    * the plugin.
    */
-  @NotNull
+  @Nullable
   Plugin plugin;
 
   /**
@@ -111,7 +112,7 @@ final class EventListener<Plugin, Event, Priority>
    * @param handlers the handlers.
    */
   EventListener(
-    @NotNull final Plugin plugin,
+    @Nullable final Plugin plugin,
     @NotNull final SingleSubscriptionBuilder.Get<Event, Priority> getter,
     @NotNull final List<BiConsumer<Subscription, Event>> handlers
   ) {

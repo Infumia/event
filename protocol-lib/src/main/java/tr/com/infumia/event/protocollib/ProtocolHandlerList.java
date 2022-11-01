@@ -1,12 +1,14 @@
-package tr.com.infumia.event.protocol;
+package tr.com.infumia.event.protocollib;
 
 import com.comphenix.protocol.events.PacketEvent;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tr.com.infumia.event.common.FunctionalHandlerList;
 import tr.com.infumia.event.common.Subscription;
 
@@ -54,7 +56,11 @@ public interface ProtocolHandlerList
     @NotNull
     @Override
     @SneakyThrows
-    public Subscription register(@NotNull final Plugin plugin) {
+    public Subscription register(@Nullable final Plugin plugin) {
+      Objects.requireNonNull(
+        plugin,
+        "Plugin cannot be null, initiate the plugin via Plugins#init method!"
+      );
       if (this.handlers.isEmpty()) {
         throw new IllegalStateException("No handlers have been registered");
       }

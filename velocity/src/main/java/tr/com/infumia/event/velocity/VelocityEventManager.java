@@ -19,11 +19,11 @@ public record VelocityEventManager(@NotNull ProxyServer server)
   public <Registered> EventExecutor<Registered> register(
     @NotNull final Object plugin,
     @NotNull final Class<Registered> eventClass,
-    @NotNull final PostOrder postOrder,
+    @NotNull final PostOrder priority,
     @NotNull final EventExecutor<Registered> executor
   ) {
     this.server.getEventManager()
-      .register(plugin, eventClass, postOrder, new Handler<>(executor));
+      .register(plugin, eventClass, priority, new Handler<>(executor));
     return executor;
   }
 

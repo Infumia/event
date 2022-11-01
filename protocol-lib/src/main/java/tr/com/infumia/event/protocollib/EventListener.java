@@ -1,4 +1,4 @@
-package tr.com.infumia.event.protocol;
+package tr.com.infumia.event.protocollib;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketAdapter;
@@ -92,7 +92,6 @@ final class EventListener extends PacketAdapter implements Subscription {
     @NotNull final List<BiConsumer<Subscription, PacketEvent>> handlers
   ) {
     super(plugin, getter.priority(), getter.types());
-    this.plugin = plugin;
     this.types = getter.types();
     this.exceptionConsumer = getter.exceptionConsumer();
     this.filters = getter.filters().toArray(Predicate[]::new);

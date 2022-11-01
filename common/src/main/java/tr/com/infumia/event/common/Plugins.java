@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * a utility class that contains utility methods for plugins.
@@ -25,6 +26,19 @@ public class Plugins {
   /**
    * initiates the events.
    *
+   * @param manager the manager to init.
+   * @param <Event> type of the event class.
+   * @param <Priority> type of the priority class.
+   */
+  public <Event, Priority> void init(
+    @NotNull final EventManager<?, Event, Priority> manager
+  ) {
+    Plugins.EVENT_MANAGER.set(manager);
+  }
+
+  /**
+   * initiates the events.
+   *
    * @param plugin the plugin to init.
    * @param manager the manager to init.
    * @param <Plugin> type of the plugin.
@@ -32,7 +46,7 @@ public class Plugins {
    * @param <Priority> type of the priority class.
    */
   public <Plugin, Event, Priority> void init(
-    @NotNull final Plugin plugin,
+    @Nullable final Plugin plugin,
     @NotNull final EventManager<Plugin, Event, Priority> manager
   ) {
     Plugins.PLUGIN.set(plugin);
@@ -65,11 +79,8 @@ public class Plugins {
    *
    * @return plugin.
    */
-  @NotNull
+  @Nullable
   public <Plugin> Plugin plugin() {
-    return (Plugin) Objects.requireNonNull(
-      Plugins.PLUGIN.get(),
-      "Plugin not found, use #init(Plugin, EventManager) to initialize!"
-    );
+    return (Plugin) Plugins.PLUGIN.get();
   }
 }

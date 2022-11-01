@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tr.com.infumia.event.common.FunctionalHandlerList;
 import tr.com.infumia.event.common.Subscription;
 
@@ -61,7 +62,7 @@ public interface SingleHandlerList<Plugin, Event>
     @NotNull
     @Override
     @SneakyThrows
-    public Subscription register(@NotNull final Plugin plugin) {
+    public Subscription register(@Nullable final Plugin plugin) {
       if (this.handlers.isEmpty()) {
         throw new IllegalStateException("No handlers have been registered");
       }
