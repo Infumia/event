@@ -58,6 +58,12 @@ final class Plugin {
     <version>VERSION</version>
     <scope>provided</scope>
   </dependency>
+  <dependency>
+    <groupId>tr.com.infumia</groupId>
+    <artifactId>EventShiruka</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
 </dependencies>
 ```
 ### Gradle
