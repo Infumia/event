@@ -58,6 +58,12 @@ final class Plugin {
     <version>VERSION</version>
     <scope>provided</scope>
   </dependency>
+  <dependency>
+    <groupId>tr.com.infumia</groupId>
+    <artifactId>EventShiruka</artifactId>
+    <version>VERSION</version>
+    <scope>provided</scope>
+  </dependency>
 </dependencies>
 ```
 ### Gradle
@@ -72,5 +78,6 @@ dependencies {
   implementation "tr.com.infumia:EventPaper:VERSION"
   implementation "tr.com.infumia:EventProtocol:VERSION"
   implementation "tr.com.infumia:EventVelocity:VERSION"
+  implementation "tr.com.infumia:EventShiruka:VERSION"
 }
 ```
