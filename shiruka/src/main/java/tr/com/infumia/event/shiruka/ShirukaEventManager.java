@@ -13,7 +13,6 @@ import tr.com.infumia.event.common.EventManager;
 /**
  * a class that represents shiruka event managers.
  */
-@SuppressWarnings("unchecked")
 public final class ShirukaEventManager
   implements EventManager<Plugin, Event, Integer> {
 
