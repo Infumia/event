@@ -1,4 +1,4 @@
-import com.diffplug.gradle.spotless.SpotlessPlugin
+import com.diffplug.gradle.spotless.SpotlessExtension
 import com.diffplug.spotless.LineEnding
 
 plugins {
@@ -6,11 +6,48 @@ plugins {
   `java-library`
   `maven-publish`
   signing
-  id("com.diffplug.spotless") version "6.11.0"
-  id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+  alias(libs.plugins.spotless)
+  alias(libs.plugins.nexus)
 }
 
 val signRequired = !rootProject.property("dev").toString().toBoolean()
+val spotlessApply = rootProject.property("spotless.apply").toString().toBoolean()
+
+repositories {
+  mavenCentral()
+}
+
+if (spotlessApply) {
+  configure<SpotlessExtension> {
+    lineEndings = LineEnding.UNIX
+
+    format("encoding") {
+      target("*.*")
+      encoding("UTF-8")
+    }
+
+    java {
+      target("**/src/**/java/**/*.java")
+      importOrder()
+      removeUnusedImports()
+      endWithNewline()
+      indentWithSpaces(2)
+      trimTrailingWhitespace()
+      prettier(
+        mapOf(
+          "prettier" to "2.7.1",
+          "prettier-plugin-java" to "1.6.2"
+        )
+      ).config(
+        mapOf(
+          "parser" to "java",
+          "tabWidth" to 2,
+          "useTabs" to false
+        )
+      )
+    }
+  }
+}
 
 allprojects {
   group = "tr.com.infumia"
@@ -19,7 +56,16 @@ allprojects {
     "Event"
   } else {
     val parentName = parent!!.extra["qualifiedProjectName"].toString()
-    parentName + name[0].toUpperCase() + name.substring(1)
+    var current = name[0].toUpperCase() + name.substring(1)
+    var index: Int? = 0
+    while (index != null) {
+      index = current.indexOf('-')
+      if (index == -1) {
+        break
+      }
+      current = current.substring(0, index) + current[index + 1].toUpperCase() + current.substring(index + 2)
+    }
+    parentName + current
   }
 }
 
@@ -28,7 +74,6 @@ subprojects {
   apply<JavaLibraryPlugin>()
   apply<MavenPublishPlugin>()
   apply<SigningPlugin>()
-  apply<SpotlessPlugin>()
 
   val qualifiedProjectName = project.extra["qualifiedProjectName"].toString()
 
@@ -71,7 +116,6 @@ subprojects {
     }
 
     build {
-      dependsOn(spotlessApply)
       dependsOn(jar)
       dependsOn(sourcesJar)
       dependsOn(javadocJar)
@@ -96,31 +140,6 @@ subprojects {
 
     testAnnotationProcessor(rootProject.libs.lombok)
     testAnnotationProcessor(rootProject.libs.annotations)
-  }
-
-  spotless {
-    lineEndings = LineEnding.UNIX
-    isEnforceCheck = false
-
-    java {
-      importOrder()
-      removeUnusedImports()
-      endWithNewline()
-      indentWithSpaces(2)
-      trimTrailingWhitespace()
-      prettier(
-        mapOf(
-          "prettier" to "2.7.1",
-          "prettier-plugin-java" to "1.6.2"
-        )
-      ).config(
-        mapOf(
-          "parser" to "java",
-          "tabWidth" to 2,
-          "useTabs" to false
-        )
-      )
-    }
   }
 
   publishing {

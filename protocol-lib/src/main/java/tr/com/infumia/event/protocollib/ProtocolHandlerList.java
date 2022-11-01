@@ -1,4 +1,4 @@
-package tr.com.infumia.event.protocol;
+package tr.com.infumia.event.protocollib;
 
 import com.comphenix.protocol.events.PacketEvent;
 import java.util.Objects;

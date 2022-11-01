@@ -6,3 +6,7 @@ paper = { module = "io.papermc.paper:paper-api", version = "1.18.2-R0.1-SNAPSHOT
 velocity = { module = "com.velocitypowered:velocity-api", version = "3.1.1" }
 protocollib = { module = "com.comphenix.protocol:ProtocolLib", version = "4.8.0" }
 shiruka = { module = "io.github.shiruka:api", version = "3.0.16-SNAPSHOT" }
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version = "6.11.0" }
+nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.1.0" }
