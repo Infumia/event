@@ -170,9 +170,9 @@ subprojects {
             }
           }
           scm {
-            connection.set("scm:git:git://github.com/infumia/terminable.git")
-            developerConnection.set("scm:git:ssh://github.com/infumia/terminable.git")
-            url.set("https://github.com/infumia/terminable")
+            connection.set("scm:git:git://github.com/infumia/event.git")
+            developerConnection.set("scm:git:ssh://github.com/infumia/event.git")
+            url.set("https://github.com/infumia/event")
           }
         }
       }
