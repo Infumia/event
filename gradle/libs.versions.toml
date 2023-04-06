@@ -8,5 +8,5 @@ protocollib = { module = "com.comphenix.protocol:ProtocolLib", version = "4.8.0"
 shiruka = { module = "io.github.shiruka:api", version = "3.0.16" }
 
 [plugins]
-spotless = { id = "com.diffplug.spotless", version = "6.17.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.18.0" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
