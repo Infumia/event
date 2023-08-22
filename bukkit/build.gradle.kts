@@ -1,5 +1,5 @@
 dependencies {
   implementation(project(":event-common"))
 
-  compileOnly(libs.velocity)
+  compileOnly(libs.bukkit)
 }

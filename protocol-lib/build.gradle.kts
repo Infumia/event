@@ -1,6 +1,6 @@
 dependencies {
-  implementation(project(":common"))
+  implementation(project(":event-common"))
 
   compileOnly(libs.protocollib)
-  compileOnly(libs.paper)
+  compileOnly(libs.bukkit)
 }

@@ -6,49 +6,42 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.EventExecutor;
 import tr.com.infumia.event.common.EventManager;
+import tr.com.infumia.event.common.Plugins;
 
-/**
- * a record class that represents velocity event managers.
- *
- * @param server the server.
- */
-public record VelocityEventManager(@NotNull ProxyServer server)
-  implements EventManager<Object, Object, PostOrder> {
+public final class VelocityEventManager implements EventManager<Object, PostOrder> {
+
+  @NotNull
+  private final ProxyServer server;
+
+  public VelocityEventManager(@NotNull final ProxyServer server) {
+    this.server = server;
+  }
+
   @NotNull
   @Override
   public <Registered> EventExecutor<Registered> register(
-    @NotNull final Object plugin,
     @NotNull final Class<Registered> eventClass,
     @NotNull final PostOrder priority,
     @NotNull final EventExecutor<Registered> executor
   ) {
     this.server.getEventManager()
-      .register(plugin, eventClass, priority, new Handler<>(executor));
+      .register(Plugins.plugin(), eventClass, priority, new Handler<>(executor));
     return executor;
   }
 
   @Override
-  public <Registered> void unregister(
-    @NotNull final Object plugin,
-    @NotNull final EventExecutor<Registered> executor
-  ) {
+  public <Registered> void unregister(@NotNull final EventExecutor<Registered> executor) {
     this.server.getEventManager()
-      .unregister(plugin, (EventHandler<?>) executor.nativeExecutor());
+      .unregister(Plugins.plugin(), (EventHandler<?>) executor.nativeExecutor());
   }
 
-  /**
-   * a record class that represents event handlers.
-   *
-   * @param <Registered> type of the registered event.
-   */
-  private record Handler<Registered>(
-    @NotNull EventExecutor<Registered> executor
-  )
-    implements EventHandler<Registered> {
-    /**
-     * ctor.
-     */
-    private Handler {
+  private static final class Handler<Registered> implements EventHandler<Registered> {
+
+    @NotNull
+    private final EventExecutor<Registered> executor;
+
+    public Handler(@NotNull EventExecutor<Registered> executor) {
+      this.executor = executor;
       executor.nativeExecutor(this);
     }
 
