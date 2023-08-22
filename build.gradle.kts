@@ -86,7 +86,7 @@ subprojects {
         artifact(tasks["javadocJar"])
         pom {
           name.set("Event")
-          description.set("A builder-like event library for Paper/Velocity.")
+          description.set("A builder-like event library for Bukkit/ProtocolLib/Velocity/Shiruka.")
           url.set("https://infumia.com.tr/")
           licenses {
             license {
