@@ -9,9 +9,9 @@
 ```java
 final class Plugin {
   void onLoad() {
-    // Paper
-    final var paperEventManager = new PaperEventManager();
-    Plugins.init(this, paperEventManager);
+    // Bukkit
+    final var bukkitEventManager = new BukkitEventManager();
+    Plugins.init(this, bukkitEventManager);
     // Velocity
     final var velocityEventManager = new VelocityEventManager(this.proxyServer);
     Plugins.init(this, velocityEventManager);
@@ -19,8 +19,8 @@ final class Plugin {
     final var shirukaEventManager = new ShirukaEventManager();
     Plugins.init(shirukaEventManager);
     // Protocol
-    final var paperEventManager = new PaperEventManager();
-    Plugins.init(this, paperEventManager);
+      final var bukkitEventManager = new BukkitEventManager();
+    Plugins.init(this, bukkitEventManager);
     Protocol.subscribe(ListenerPriority.NORMAL, PacketType.Play.Server.EXPLOSION)
       .filter(event -> true)
       .handler(event -> {
