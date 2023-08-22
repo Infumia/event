@@ -3,7 +3,6 @@ package tr.com.infumia.event.shiruka;
 import io.github.shiruka.api.Shiruka;
 import io.github.shiruka.api.event.Event;
 import io.github.shiruka.api.event.EventListener;
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.EventExecutor;
 import tr.com.infumia.event.common.EventManager;
@@ -24,7 +23,6 @@ public final class ShirukaEventManager implements EventManager<Event, Integer> {
   }
 
   @Override
-  @SneakyThrows
   public <Registered extends Event> void unregister(
     @NotNull final EventExecutor<Registered> executor
   ) {
