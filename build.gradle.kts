@@ -1,5 +1,3 @@
-import com.diffplug.spotless.LineEnding
-
 plugins {
   java
   `java-library`
@@ -125,7 +123,7 @@ nexusPublishing.repositories.sonatype()
 repositories.mavenCentral()
 
 spotless {
-  lineEndings = LineEnding.UNIX
+  lineEndings = com.diffplug.spotless.LineEnding.UNIX
 
   val prettierConfig =
     mapOf(
@@ -146,6 +144,18 @@ spotless {
     endWithNewline()
     trimTrailingWhitespace()
     ktlint()
+  }
+
+  yaml {
+    target(
+      ".github/**/*.yml",
+      ".github/**/*.yaml",
+    )
+    endWithNewline()
+    trimTrailingWhitespace()
+    val jackson = jackson()
+    jackson.yamlFeature("LITERAL_BLOCK_STYLE", true)
+    jackson.yamlFeature("SPLIT_LINES", false)
   }
 
   java {
