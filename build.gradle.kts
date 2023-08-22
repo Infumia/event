@@ -9,7 +9,7 @@ plugins {
 
 val signRequired = !rootProject.property("dev").toString().toBoolean()
 
-allprojects{ group = "tr.com.infumia" }
+allprojects { group = "tr.com.infumia" }
 
 subprojects {
   apply<JavaPlugin>()
