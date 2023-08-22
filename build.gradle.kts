@@ -11,63 +11,6 @@ plugins {
 }
 
 val signRequired = !rootProject.property("dev").toString().toBoolean()
-val spotlessApply = rootProject.property("spotless.apply").toString().toBoolean()
-
-repositories {
-  mavenCentral()
-}
-
-if (spotlessApply) {
-  configure<SpotlessExtension> {
-    lineEndings = LineEnding.UNIX
-
-    format("encoding") {
-      target("*.*")
-      encoding("UTF-8")
-    }
-
-    java {
-      target("**/src/**/java/**/*.java")
-      importOrder()
-      removeUnusedImports()
-      endWithNewline()
-      indentWithSpaces(2)
-      trimTrailingWhitespace()
-      prettier(
-        mapOf(
-          "prettier" to "2.7.1",
-          "prettier-plugin-java" to "1.6.2"
-        )
-      ).config(
-        mapOf(
-          "parser" to "java",
-          "tabWidth" to 2,
-          "useTabs" to false
-        )
-      )
-    }
-  }
-}
-
-allprojects {
-  group = "tr.com.infumia"
-
-  extra["qualifiedProjectName"] = if (parent == null) {
-    "Event"
-  } else {
-    val parentName = parent!!.extra["qualifiedProjectName"].toString()
-    var current = name[0].toUpperCase() + name.substring(1)
-    var index: Int? = 0
-    while (index != null) {
-      index = current.indexOf('-')
-      if (index == -1) {
-        break
-      }
-      current = current.substring(0, index) + current[index + 1].toUpperCase() + current.substring(index + 2)
-    }
-    parentName + current
-  }
-}
 
 subprojects {
   apply<JavaPlugin>()
@@ -75,11 +18,11 @@ subprojects {
   apply<MavenPublishPlugin>()
   apply<SigningPlugin>()
 
-  val qualifiedProjectName = project.extra["qualifiedProjectName"].toString()
+  group = "tr.com.infumia"
 
   java {
     toolchain {
-      languageVersion.set(JavaLanguageVersion.of(17))
+      languageVersion.set(JavaLanguageVersion.of(8))
     }
   }
 
@@ -90,7 +33,6 @@ subprojects {
 
     jar {
       archiveClassifier.set(null as String?)
-      archiveBaseName.set(qualifiedProjectName)
       archiveVersion.set(project.version.toString())
     }
 
@@ -102,7 +44,6 @@ subprojects {
     val javadocJar by creating(Jar::class) {
       dependsOn("javadoc")
       archiveClassifier.set("javadoc")
-      archiveBaseName.set(qualifiedProjectName)
       archiveVersion.set(project.version.toString())
       from(javadoc)
     }
@@ -110,7 +51,6 @@ subprojects {
     val sourcesJar by creating(Jar::class) {
       dependsOn("classes")
       archiveClassifier.set("sources")
-      archiveBaseName.set(qualifiedProjectName)
       archiveVersion.set(project.version.toString())
       from(sourceSets["main"].allSource)
     }
@@ -131,22 +71,19 @@ subprojects {
   }
 
   dependencies {
-    compileOnly(rootProject.libs.terminable)
     compileOnly(rootProject.libs.lombok)
     compileOnly(rootProject.libs.annotations)
 
     annotationProcessor(rootProject.libs.lombok)
-    annotationProcessor(rootProject.libs.annotations)
 
     testAnnotationProcessor(rootProject.libs.lombok)
-    testAnnotationProcessor(rootProject.libs.annotations)
   }
 
   publishing {
     publications {
       val publication = create<MavenPublication>("mavenJava") {
         groupId = project.group.toString()
-        artifactId = qualifiedProjectName
+        artifactId = project.name
         version = project.version.toString()
 
         from(components["java"])
@@ -188,8 +125,44 @@ subprojects {
   }
 }
 
-nexusPublishing {
-  repositories {
-    sonatype()
+nexusPublishing.repositories.sonatype()
+
+repositories.mavenCentral()
+
+spotless {
+  lineEndings = LineEnding.UNIX
+
+  val prettierConfig =
+    mapOf(
+      "prettier" to "2.8.8",
+      "prettier-plugin-java" to "2.3.0",
+    )
+
+  format("encoding") {
+    target("*.*")
+    encoding("UTF-8")
+    endWithNewline()
+    trimTrailingWhitespace()
+  }
+
+  kotlinGradle {
+    target("**/*.gradle.kts")
+    indentWithSpaces(2)
+    endWithNewline()
+    trimTrailingWhitespace()
+    ktlint()
+  }
+
+  java {
+    target("**/src/**/java/**/*.java")
+    importOrder()
+    removeUnusedImports()
+    indentWithSpaces(2)
+    endWithNewline()
+    trimTrailingWhitespace()
+    prettier(prettierConfig)
+      .config(
+        mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
+      )
   }
 }
