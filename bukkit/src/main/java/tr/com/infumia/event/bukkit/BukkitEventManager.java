@@ -1,5 +1,10 @@
 package tr.com.infumia.event.bukkit;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
@@ -13,6 +18,8 @@ import tr.com.infumia.event.common.Plugins;
 
 @SuppressWarnings("unchecked")
 public final class BukkitEventManager implements EventManager<Event, EventPriority> {
+
+  private final Map<Class<?>, MethodHandle> getHandlerListMethods = new HashMap<>();
 
   @NotNull
   @Override
@@ -33,9 +40,20 @@ public final class BukkitEventManager implements EventManager<Event, EventPriori
   public <Registered extends Event> void unregister(
     @NotNull final EventExecutor<Registered> executor
   ) {
-    ((HandlerList) executor.eventClass().getMethod("getHandlerList").invoke(null)).unregister(
-        (Listener) executor.nativeExecutor()
-      );
+    final MethodHandle handle =
+      this.getHandlerListMethods.computeIfAbsent(
+          executor.eventClass(),
+          cls -> {
+            try {
+              return MethodHandles
+                .lookup()
+                .findStatic(cls, "getHandlerList", MethodType.methodType(HandlerList.class));
+            } catch (final Exception e) {
+              throw new RuntimeException(e);
+            }
+          }
+        );
+    ((HandlerList) handle.invokeExact()).unregister((Listener) executor.nativeExecutor());
   }
 
   private static final class Handler<Registered>
