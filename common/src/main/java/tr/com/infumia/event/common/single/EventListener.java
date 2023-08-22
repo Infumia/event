@@ -1,6 +1,5 @@
 package tr.com.infumia.event.common.single;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
@@ -8,124 +7,60 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.experimental.Accessors;
-import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import tr.com.infumia.event.common.EventExecutor;
 import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.event.common.Subscription;
 
-/**
- * a class that represents event listener.
- *
- * @param <Event> type of the event class.
- */
-@Accessors(fluent = true)
-@SuppressWarnings("unchecked")
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-final class EventListener<Plugin, Event, Priority>
-  implements EventExecutor<Event>, Subscription {
+final class EventListener<Event, Priority> implements EventExecutor<Event>, Subscription {
 
-  /**
-   * the active.
-   */
-  AtomicBoolean active = new AtomicBoolean(true);
+  private final AtomicBoolean active = new AtomicBoolean(true);
 
-  /**
-   * the call count.
-   */
-  AtomicLong callCount = new AtomicLong();
+  private final AtomicLong callCount = new AtomicLong();
 
-  /**
-   * the event class.
-   */
   @Getter
   @NotNull
-  Class<Event> eventClass;
+  private final Class<Event> eventClass;
 
-  /**
-   * the exception consumer.
-   */
   @NotNull
-  BiConsumer<Event, Throwable> exceptionConsumer;
+  private final BiConsumer<Event, Throwable> exceptionConsumer;
 
-  /**
-   * the filters.
-   */
   @NotNull
-  Predicate<Event>[] filters;
+  private final Predicate<Event> filter;
 
-  /**
-   * the handle subclasses.
-   */
-  boolean handleSubclasses;
+  private final boolean handleSubclasses;
 
-  /**
-   * the handlers.
-   */
   @NotNull
-  BiConsumer<Subscription, Event>[] handlers;
+  private final BiConsumer<Subscription, Event> handler;
 
-  /**
-   * the mid-expiry test.
-   */
   @NotNull
-  BiPredicate<Subscription, Event>[] midExpiryTests;
+  private final BiPredicate<Subscription, Event> midExpiryTest;
 
-  /**
-   * the native executor.
-   */
-  AtomicReference<Object> nativeExecutor = new AtomicReference<>();
+  private final AtomicReference<Object> nativeExecutor = new AtomicReference<>();
 
-  /**
-   * the plugin.
-   */
-  @Nullable
-  Plugin plugin;
-
-  /**
-   * tee post expiry tests.
-   */
   @NotNull
-  BiPredicate<Subscription, Event>[] postExpiryTests;
+  private final BiPredicate<Subscription, Event> postExpiryTest;
 
-  /**
-   * the pre expiry tests.
-   */
   @NotNull
-  BiPredicate<Subscription, Event>[] preExpiryTests;
+  private final BiPredicate<Subscription, Event> preExpiryTest;
 
-  /**
-   * the priority.
-   */
   @NotNull
-  Priority priority;
+  private final Priority priority;
 
-  /**
-   * ctor.
-   *
-   * @param plugin the plugin.
-   * @param getter the getter.
-   * @param handlers the handlers.
-   */
   EventListener(
-    @Nullable final Plugin plugin,
     @NotNull final SingleSubscriptionBuilder.Get<Event, Priority> getter,
-    @NotNull final List<BiConsumer<Subscription, Event>> handlers
+    @NotNull final BiConsumer<Subscription, Event> handler
   ) {
-    this.plugin = plugin;
     this.eventClass = getter.eventClass();
     this.priority = getter.priority();
     this.exceptionConsumer = getter.exceptionConsumer();
     this.handleSubclasses = getter.isHandleSubclasses();
-    this.filters = getter.filters().toArray(Predicate[]::new);
-    this.preExpiryTests = getter.preExpiryTests().toArray(BiPredicate[]::new);
-    this.midExpiryTests = getter.midExpiryTests().toArray(BiPredicate[]::new);
-    this.postExpiryTests = getter.postExpiryTests().toArray(BiPredicate[]::new);
-    this.handlers = handlers.toArray(BiConsumer[]::new);
+    this.filter = getter.filter();
+    this.preExpiryTest = getter.preExpiryTest();
+    this.midExpiryTest = getter.midExpiryTest();
+    this.postExpiryTest = getter.postExpiryTest();
+    this.handler = handler;
   }
 
   @Override
@@ -143,7 +78,7 @@ final class EventListener<Plugin, Event, Priority>
     if (!this.active.getAndSet(false)) {
       return;
     }
-    Plugins.manager().unregister(this.plugin, this);
+    Plugins.manager().unregister(this);
   }
 
   @Override
@@ -161,43 +96,32 @@ final class EventListener<Plugin, Event, Priority>
       return;
     }
     if (this.closed()) {
-      Plugins.manager().unregister(this.plugin, this);
+      Plugins.manager().unregister(this);
       return;
     }
-    final var eventInstance = this.eventClass.cast(event);
-    for (final var test : this.preExpiryTests) {
-      if (test.test(this, eventInstance)) {
-        Plugins.manager().unregister(this.plugin, this);
+    final Event eventInstance = this.eventClass.cast(event);
+    if (this.preExpiryTest.test(this, eventInstance)) {
+      Plugins.manager().unregister(this);
+      this.active.set(false);
+      return;
+    }
+    try {
+      if (!this.filter.test(eventInstance)) {
+        return;
+      }
+      if (this.midExpiryTest.test(this, eventInstance)) {
+        Plugins.manager().unregister(this);
         this.active.set(false);
         return;
       }
-    }
-    try {
-      for (final var filter : this.filters) {
-        if (!filter.test(eventInstance)) {
-          return;
-        }
-      }
-      for (final var test : this.midExpiryTests) {
-        if (test.test(this, eventInstance)) {
-          Plugins.manager().unregister(this.plugin, this);
-          this.active.set(false);
-          return;
-        }
-      }
-      for (final var handler : this.handlers) {
-        handler.accept(this, eventInstance);
-      }
+      this.handler.accept(this, eventInstance);
       this.callCount.incrementAndGet();
     } catch (final Throwable t) {
       this.exceptionConsumer.accept(eventInstance, t);
     }
-    for (final var test : this.postExpiryTests) {
-      if (test.test(this, eventInstance)) {
-        Plugins.manager().unregister(this.plugin, this);
-        this.active.set(false);
-        return;
-      }
+    if (this.postExpiryTest.test(this, eventInstance)) {
+      Plugins.manager().unregister(this);
+      this.active.set(false);
     }
   }
 
@@ -212,14 +136,9 @@ final class EventListener<Plugin, Event, Priority>
     this.nativeExecutor.set(nativeExecutor);
   }
 
-  /**
-   * registers the event.
-   */
   @NotNull
   Subscription register() {
-    Plugins
-      .manager()
-      .register(this.plugin, this.eventClass, this.priority, this);
+    Plugins.manager().register(this.eventClass, this.priority, this);
     return this;
   }
 }

@@ -36,33 +36,28 @@ final class Plugin {
   <!-- Do NOT forget to relocate -->
   <dependency>
     <groupId>tr.com.infumia</groupId>
-    <artifactId>terminable</artifactId>
+    <artifactId>event-common</artifactId>
     <version>VERSION</version>
-    <scope>provided</scope>
   </dependency>
   <dependency>
     <groupId>tr.com.infumia</groupId>
-    <artifactId>EventPaper</artifactId>
+    <artifactId>event-bukkit</artifactId>
     <version>VERSION</version>
-    <scope>provided</scope>
   </dependency>
   <dependency>
     <groupId>tr.com.infumia</groupId>
-    <artifactId>EventProtocolLib</artifactId>
+    <artifactId>event-protocol-lib</artifactId>
     <version>VERSION</version>
-    <scope>provided</scope>
   </dependency>
   <dependency>
     <groupId>tr.com.infumia</groupId>
-    <artifactId>EventVelocity</artifactId>
+    <artifactId>event-velocity</artifactId>
     <version>VERSION</version>
-    <scope>provided</scope>
   </dependency>
   <dependency>
     <groupId>tr.com.infumia</groupId>
-    <artifactId>EventShiruka</artifactId>
+    <artifactId>event-shiruka</artifactId>
     <version>VERSION</version>
-    <scope>provided</scope>
   </dependency>
 </dependencies>
 ```
@@ -74,10 +69,10 @@ plugins {
 
 dependencies {
   // Do NOT forget to relocate.
-  implementation "tr.com.infumia:terminable:VERSION"
-  implementation "tr.com.infumia:EventPaper:VERSION"
-  implementation "tr.com.infumia:EventProtocol:VERSION"
-  implementation "tr.com.infumia:EventVelocity:VERSION"
-  implementation "tr.com.infumia:EventShiruka:VERSION"
+  implementation "tr.com.infumia:event-common:VERSION"
+  implementation "tr.com.infumia:event-bukkit:VERSION"
+  implementation "tr.com.infumia:event-protocol-lib:VERSION"
+  implementation "tr.com.infumia:event-velocity:VERSION"
+  implementation "tr.com.infumia:event-shiruka:VERSION"
 }
 ```

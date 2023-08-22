@@ -3,7 +3,7 @@ rootProject.name = "event"
 include0(
   mapOf(
     ":common" to "event-common",
-    ":paper" to "event-paper",
+    ":bukkit" to "event-bukkit",
     ":protocol-lib" to "event-protocol-lib",
     ":shiruka" to "event-shiruka",
     ":velocity" to "event-velocity",

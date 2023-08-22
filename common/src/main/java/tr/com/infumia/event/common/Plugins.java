@@ -6,81 +6,39 @@ import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * a utility class that contains utility methods for plugins.
- */
 @UtilityClass
 @SuppressWarnings("unchecked")
 public class Plugins {
 
-  /**
-   * the instance.
-   */
-  private final AtomicReference<EventManager<?, ?, ?>> EVENT_MANAGER = new AtomicReference<>();
+  private final AtomicReference<EventManager<?, ?>> EVENT_MANAGER = new AtomicReference<>();
 
-  /**
-   * the instance.
-   */
   private final AtomicReference<Object> PLUGIN = new AtomicReference<>();
 
-  /**
-   * initiates the events.
-   *
-   * @param manager the manager to init.
-   * @param <Event> type of the event class.
-   * @param <Priority> type of the priority class.
-   */
-  public <Event, Priority> void init(
-    @NotNull final EventManager<?, Event, Priority> manager
-  ) {
+  public <Event, Priority> void init(@NotNull final EventManager<Event, Priority> manager) {
     Plugins.EVENT_MANAGER.set(manager);
   }
 
-  /**
-   * initiates the events.
-   *
-   * @param plugin the plugin to init.
-   * @param manager the manager to init.
-   * @param <Plugin> type of the plugin.
-   * @param <Event> type of the event class.
-   * @param <Priority> type of the priority class.
-   */
-  public <Plugin, Event, Priority> void init(
-    @Nullable final Plugin plugin,
-    @NotNull final EventManager<Plugin, Event, Priority> manager
+  public <Event, Priority> void init(
+    @Nullable final Object plugin,
+    @NotNull final EventManager<Event, Priority> manager
   ) {
     Plugins.PLUGIN.set(plugin);
     Plugins.EVENT_MANAGER.set(manager);
   }
 
-  /**
-   * gets the event manager.
-   *
-   * @param <Plugin> type of the plugin class.
-   * @param <Event> type of the event class.
-   * @param <Priority> type of the priority class.
-   *
-   * @return event manager.
-   */
   @NotNull
-  public <
-    Plugin, Event, Priority
-  > EventManager<Plugin, Event, Priority> manager() {
-    return (EventManager<Plugin, Event, Priority>) Objects.requireNonNull(
+  public <Event, Priority> EventManager<Event, Priority> manager() {
+    return (EventManager<Event, Priority>) Objects.requireNonNull(
       Plugins.EVENT_MANAGER.get(),
       "EventManager not found, use #init(Plugin, EventManager) to initialize!"
     );
   }
 
-  /**
-   * gets the plugin.
-   *
-   * @param <Plugin> type of the plugin.
-   *
-   * @return plugin.
-   */
-  @Nullable
+  @NotNull
   public <Plugin> Plugin plugin() {
-    return (Plugin) Plugins.PLUGIN.get();
+    return Objects.requireNonNull(
+      (Plugin) Plugins.PLUGIN.get(),
+      "Plugin not found, use #init(Plugin, EventManager) to initialize!"
+    );
   }
 }

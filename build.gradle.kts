@@ -1,4 +1,3 @@
-import com.diffplug.gradle.spotless.SpotlessExtension
 import com.diffplug.spotless.LineEnding
 
 plugins {
@@ -21,9 +20,8 @@ subprojects {
   group = "tr.com.infumia"
 
   java {
-    toolchain {
-      languageVersion.set(JavaLanguageVersion.of(8))
-    }
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
   }
 
   tasks {
@@ -33,7 +31,6 @@ subprojects {
 
     jar {
       archiveClassifier.set(null as String?)
-      archiveVersion.set(project.version.toString())
     }
 
     javadoc {
@@ -44,14 +41,12 @@ subprojects {
     val javadocJar by creating(Jar::class) {
       dependsOn("javadoc")
       archiveClassifier.set("javadoc")
-      archiveVersion.set(project.version.toString())
       from(javadoc)
     }
 
     val sourcesJar by creating(Jar::class) {
       dependsOn("classes")
       archiveClassifier.set("sources")
-      archiveVersion.set(project.version.toString())
       from(sourceSets["main"].allSource)
     }
 
