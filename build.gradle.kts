@@ -9,13 +9,13 @@ plugins {
 
 val signRequired = !rootProject.property("dev").toString().toBoolean()
 
+allprojects{ group = "tr.com.infumia" }
+
 subprojects {
   apply<JavaPlugin>()
   apply<JavaLibraryPlugin>()
   apply<MavenPublishPlugin>()
   apply<SigningPlugin>()
-
-  group = "tr.com.infumia"
 
   java {
     sourceCompatibility = JavaVersion.VERSION_1_8
