@@ -19,7 +19,7 @@ final class Plugin {
     final var shirukaEventManager = new ShirukaEventManager();
     Plugins.init(shirukaEventManager);
     // Protocol
-      final var bukkitEventManager = new BukkitEventManager();
+    final var bukkitEventManager = new BukkitEventManager();
     Plugins.init(this, bukkitEventManager);
     Protocol.subscribe(ListenerPriority.NORMAL, PacketType.Play.Server.EXPLOSION)
       .filter(event -> true)
