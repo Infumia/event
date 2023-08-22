@@ -59,7 +59,7 @@ subprojects {
 
   repositories {
     mavenCentral()
-    maven("https://papermc.io/repo/repository/maven-public/")
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
     maven("https://repo.dmulloy2.net/repository/public/")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     mavenLocal()
