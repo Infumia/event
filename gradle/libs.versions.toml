@@ -4,7 +4,7 @@ annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 terminable = { module = "tr.com.infumia:terminable", version = "0.1.4" }
 bukkit = { module = "org.bukkit:bukkit", version = "1.8-R0.1-SNAPSHOT" }
 velocity = { module = "com.velocitypowered:velocity-api", version = "3.1.1" }
-protocollib = { module = "com.comphenix.protocol:ProtocolLib", version = "4.8.0" }
+protocollib = { module = "com.comphenix.protocol:ProtocolLib", version = "5.1.0" }
 shiruka = { module = "io.github.shiruka:api", version = "3.0.16" }
 
 [plugins]
