@@ -1,14 +1,14 @@
-package tr.com.infumia.event.shiruka;
+package tr.com.infumia.event.bukkit;
 
-import io.github.shiruka.api.event.Event;
-import net.kyori.event.PostOrders;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.merged.MergedSubscriptionBuilder;
 import tr.com.infumia.event.common.single.SingleSubscriptionBuilder;
 
 public interface Events {
   @NotNull
-  static <Handled> MergedSubscriptionBuilder<Event, Integer, Handled> merge(
+  static <Handled> MergedSubscriptionBuilder<Event, EventPriority, Handled> merge(
     @NotNull final Class<Handled> handledClass
   ) {
     return MergedSubscriptionBuilder.newBuilder(handledClass);
@@ -16,9 +16,9 @@ public interface Events {
 
   @NotNull
   @SafeVarargs
-  static <Handled extends Event> MergedSubscriptionBuilder<Event, Integer, Handled> merge(
+  static <Handled extends Event> MergedSubscriptionBuilder<Event, EventPriority, Handled> merge(
     @NotNull final Class<Handled> cls,
-    @NotNull final Integer priority,
+    @NotNull final EventPriority priority,
     @NotNull final Class<? extends Handled>... classes
   ) {
     return MergedSubscriptionBuilder.newBuilder(cls, priority, classes);
@@ -26,17 +26,17 @@ public interface Events {
 
   @NotNull
   @SafeVarargs
-  static <Handled extends Event> MergedSubscriptionBuilder<Event, Integer, Handled> merge(
+  static <Handled extends Event> MergedSubscriptionBuilder<Event, EventPriority, Handled> merge(
     @NotNull final Class<Handled> cls,
     @NotNull final Class<? extends Handled>... classes
   ) {
-    return Events.merge(cls, PostOrders.NORMAL, classes);
+    return Events.merge(cls, EventPriority.NORMAL, classes);
   }
 
   @NotNull
   static <Handled extends Event> SingleSubscriptionBuilder<Handled> subscribe(
     @NotNull final Class<Handled> cls,
-    @NotNull final Integer priority
+    @NotNull final EventPriority priority
   ) {
     return SingleSubscriptionBuilder.newBuilder(cls, priority);
   }
@@ -45,6 +45,6 @@ public interface Events {
   static <Handled extends Event> SingleSubscriptionBuilder<Handled> subscribe(
     @NotNull final Class<Handled> cls
   ) {
-    return Events.subscribe(cls, PostOrders.NORMAL);
+    return Events.subscribe(cls, EventPriority.NORMAL);
   }
 }
