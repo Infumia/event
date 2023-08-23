@@ -26,7 +26,7 @@ public final class BukkitEventManager implements EventManager<Event, EventPriori
   @NotNull
   private final Plugin plugin;
 
-  public BukkitEventManager(@NotNull Plugin plugin) {
+  public BukkitEventManager(@NotNull final Plugin plugin) {
     this.plugin = plugin;
   }
 
