@@ -6,15 +6,18 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.EventExecutor;
 import tr.com.infumia.event.common.EventManager;
-import tr.com.infumia.event.common.Plugins;
 
 public final class VelocityEventManager implements EventManager<Object, PostOrder> {
 
   @NotNull
   private final ProxyServer server;
 
-  public VelocityEventManager(@NotNull final ProxyServer server) {
+  @NotNull
+  private final Object plugin;
+
+  public VelocityEventManager(@NotNull final ProxyServer server, @NotNull final Object plugin) {
     this.server = server;
+    this.plugin = plugin;
   }
 
   @NotNull
@@ -25,14 +28,14 @@ public final class VelocityEventManager implements EventManager<Object, PostOrde
     @NotNull final EventExecutor<Registered> executor
   ) {
     this.server.getEventManager()
-      .register(Plugins.plugin(), eventClass, priority, new Handler<>(executor));
+      .register(this.plugin, eventClass, priority, new Handler<>(executor));
     return executor;
   }
 
   @Override
   public <Registered> void unregister(@NotNull final EventExecutor<Registered> executor) {
     this.server.getEventManager()
-      .unregister(Plugins.plugin(), (EventHandler<?>) executor.nativeExecutor());
+      .unregister(this.plugin, (EventHandler<?>) executor.nativeExecutor());
   }
 
   private static final class Handler<Registered> implements EventHandler<Registered> {

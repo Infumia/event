@@ -5,21 +5,30 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.EventExecutor;
 import tr.com.infumia.event.common.EventManager;
-import tr.com.infumia.event.common.Plugins;
 
 @SuppressWarnings("unchecked")
 public final class BukkitEventManager implements EventManager<Event, EventPriority> {
 
   private final Map<Class<?>, MethodHandle> getHandlerListMethods = new HashMap<>();
+
+  @Getter
+  @NotNull
+  private final Plugin plugin;
+
+  public BukkitEventManager(@NotNull Plugin plugin) {
+    this.plugin = plugin;
+  }
 
   @NotNull
   @Override
@@ -31,7 +40,7 @@ public final class BukkitEventManager implements EventManager<Event, EventPriori
     final Handler<Registered> handler = new Handler<>(executor);
     Bukkit
       .getPluginManager()
-      .registerEvent(eventClass, handler, priority, handler, Plugins.plugin(), false);
+      .registerEvent(eventClass, handler, priority, handler, this.plugin, false);
     return executor;
   }
 

@@ -10,17 +10,17 @@
 final class Plugin {
   void onLoad() {
     // Bukkit
-    final var bukkitEventManager = new BukkitEventManager();
-    Plugins.init(this, bukkitEventManager);
+    final var bukkitEventManager = new BukkitEventManager(this);
+    Plugins.init(bukkitEventManager);
     // Velocity
-    final var velocityEventManager = new VelocityEventManager(this.proxyServer);
-    Plugins.init(this, velocityEventManager);
+    final var velocityEventManager = new VelocityEventManager(this.proxyServer, this);
+    Plugins.init(velocityEventManager);
     // Shiru ka
     final var shirukaEventManager = new ShirukaEventManager();
     Plugins.init(shirukaEventManager);
     // Protocol
-    final var bukkitEventManager = new BukkitEventManager();
-    Plugins.init(this, bukkitEventManager);
+    final var bukkitEventManager = new BukkitEventManager(this);
+    Plugins.init(bukkitEventManager);
     Protocol.subscribe(ListenerPriority.NORMAL, PacketType.Play.Server.EXPLOSION)
       .filter(event -> true)
       .handler(event -> {
