@@ -10,7 +10,10 @@ import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 import lombok.Getter;
+import org.bukkit.event.Event;
+import org.bukkit.event.EventPriority;
 import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.event.bukkit.BukkitEventManager;
 import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.event.common.Subscription;
 
@@ -46,7 +49,11 @@ final class EventListener extends PacketAdapter implements Subscription {
     @NotNull final ProtocolSubscriptionBuilder.Get getter,
     @NotNull final BiConsumer<Subscription, PacketEvent> handler
   ) {
-    super(Plugins.plugin(), getter.priority(), getter.types());
+    super(
+      ((BukkitEventManager) Plugins.<Event, EventPriority>manager()).plugin(),
+      getter.priority(),
+      getter.types()
+    );
     this.types = getter.types();
     this.exceptionConsumer = getter.exceptionConsumer();
     this.filter = getter.filter();
