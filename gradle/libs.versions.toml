@@ -1,5 +1,5 @@
 [libraries]
-lombok = { module = "org.projectlombok:lombok", version = "1.18.28" }
+lombok = { module = "org.projectlombok:lombok", version = "1.18.30" }
 annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 terminable = { module = "tr.com.infumia:terminable", version = "0.1.4" }
 bukkit = { module = "org.bukkit:bukkit", version = "1.8-R0.1-SNAPSHOT" }
